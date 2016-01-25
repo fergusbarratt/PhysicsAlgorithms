@@ -1,2 +1,2 @@
 # PhysicsAlgorithms
-various physics algorithms
+Molecular Dynamics, Random Matrices, and some Complex Networks
