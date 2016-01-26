@@ -1,3 +1,4 @@
+'''does small world networks like in Entropy Order Parameters & Complexity, JP Sethna'''
 import numpy as np
 import matplotlib.pyplot as plt
 import numpy.random as rd
@@ -35,6 +36,30 @@ class Network(object):
     def get_neighbours(node):
         return [other_node in self.edges[node]]
 
+    def find_path_lengths_from_node(self, target_node):
+        distances = {(target_node, target_node):0}
+        currentShell = [target_node]
+        dep=0
+        while currentShell!=[]:
+            nextShell=[]
+            for node in currentShell:
+                for neighbour in self.edges[node]:
+                    if (target_node, neighbour) not in distances:
+                        nextShell.append(neighbour)
+                        distances[(target_node, neighbour)] = dep+1
+            dep+=1
+            currentShell=copy(nextShell)
+        return distances
+
+    def find_all_path_lengths(self):
+        all_distances={}
+        for node in self.edges:
+            all_distances.update(self.find_path_lengths_from_node(node))
+        return all_distances
+
+    def find_average_path_length(self):
+        return np.mean(list(self.find_all_path_lengths().values()))
+
     def draw(self):
         G = nx.Graph()
         G.add_nodes_from(self.get_nodes())
@@ -66,13 +91,28 @@ class SmallWorldNetwork(Network):
             self.edges[rand_node_1].add(rand_node_2)
             self.edges[rand_node_2].add(rand_node_1)
 
-    def find_path_lengths_from_node(self, node):
-        pass
 
-def test_small_world_network(L=20, Z=4, p=0.2):
+def test_small_world_network(L=100, Z=2, p=0.1, draw=False):
     test_net = SmallWorldNetwork(L, Z, p)
     assert len(test_net.get_edges()) == L*Z+int(p*L*(Z))
-    test_net.draw()
+    print(test_net.find_average_path_length())
+    if draw:
+        # draw the network
+        test_net.draw()
+
+        # histogram
+        vals = np.array(list(test_net.find_all_path_lengths().values()))
+        plt.hist(vals, 20)
+
+        # strogatz plot
+        Y = np.linspace(0.001, 1, 100)
+        X = np.array([SmallWorldNetwork(L, Z, p).find_average_path_length()/SmallWorldNetwork(L, Z, 0).find_average_path_length() for p in Y])
+        plt.semilogx(Y, X)
+
+        plt.ylim([0, 1.5])
+
+        plt.show()
+    return test_net
 
 def test_network():
     new_net = Network(5)
@@ -80,3 +120,4 @@ def test_network():
     new_net.draw()
 
 test_small_world_network()
+
