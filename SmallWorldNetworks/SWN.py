@@ -74,8 +74,8 @@ class SmallWorldNetwork(Network):
         for node_skip in range(1, N_joins+1):
             for ind, node in enumerate(self.nodes):
                 self.edges[node].add(self.nodes[(ind+node_skip)%len(self.nodes)])
-        # add number of random edges
 
+        # add number of random edges
         for _ in range(int(p*N_nodes*(N_joins/2))):
             self.add_random_edge()
 
@@ -106,7 +106,9 @@ def test_small_world_network(L=100, Z=2, p=0.1, draw=False):
 
         # strogatz plot
         Y = np.linspace(0.001, 1, 100)
-        X = np.array([SmallWorldNetwork(L, Z, p).find_average_path_length()/SmallWorldNetwork(L, Z, 0).find_average_path_length() for p in Y])
+        X = np.array([SmallWorldNetwork(
+                     L, Z, p).find_average_path_length()/
+                     SmallWorldNetwork(L, Z, 0).find_average_path_length() for p in Y])
         plt.semilogx(Y, X)
 
         plt.ylim([0, 1.5])
@@ -119,5 +121,5 @@ def test_network():
     new_net.add_edge(1, 2)
     new_net.draw()
 
-test_small_world_network()
+test_small_world_network(draw=True)
 
