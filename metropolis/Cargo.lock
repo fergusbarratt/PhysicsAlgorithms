@@ -3,6 +3,7 @@ name = "metropolis"
 version = "0.1.0"
 dependencies = [
  "gnuplot 0.0.20 (registry+https://github.com/rust-lang/crates.io-index)",
+ "itertools 0.4.12 (registry+https://github.com/rust-lang/crates.io-index)",
  "nalgebra 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "rand 0.3.14 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -10,6 +11,11 @@ dependencies = [
 [[package]]
 name = "gnuplot"
 version = "0.0.20"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "itertools"
+version = "0.4.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
